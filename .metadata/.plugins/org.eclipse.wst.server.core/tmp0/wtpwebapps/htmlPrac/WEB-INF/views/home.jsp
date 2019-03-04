@@ -1,38 +1,42 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page language="java" contentType="text/html; charset=EUC-KR"
+    pageEncoding="EUC-KR"%>
+<!DOCTYPE html>
 <html>
 <head>
-	<title>Home</title>
-	<style>
-		#container > ul{
-			border: 3px dotted blue;
+<meta charset="utf-8">
+<title>¼Ó¼º ¼±ÅÃÀÚ</title>
+<style>
+   ul {
+		 list-style:none;
+   }
+	 li {
+		 width:100px;	 
+		 display:inline;
+		 float:left;
+		 margin:10px;
+	 }
+		li a {
+			padding: 5px 20px;
+			font-size: 14px;
+			color: blue;
+			text-decoration: none;
 		}
-		h1 + ul{
-			color: red;
-			font-weight: bold;
-		}
-	</style>
+	a[href]{
+		background:blue;
+	}
+	a[href="aa"]{
+		background: red;
+	}
+</style>
 </head>
+
 <body>
-<selection id="container">
-	<header><h1>ì˜ˆì•½ë°©ë²•ìš”ê¸ˆ</h1></header>
-	<p> ìš”ì•ˆë„ë¼ ì˜ˆì•½í• ë ¤ë©´?
 	<ul>
-		<h1>ì˜ˆì•½ë°©ë²•</h1>
-			<ul>
-				<li>ì§ì ‘í†µí™”</li>
-				<li>ë¬¸ì</li>		
-			</ul>
-		
-	
-		<li>ê°€ê²©
-			<ul>
-				<li>1ì¸ 10000</li>
-				<li>2ì¸ 20000</li>		aa
-			</ul>
-		</li>
+		<li><a>¸ŞÀÎ ¸Ş´º : </a></li>
+		<li><a href="#">¸Ş´º 1</a></li>
+		<li><a href="#">¸Ş´º 2</a></li>
+		<li><a href="aa">ÇÏÀÌÇÏÀÌ</a></li>
+		<li><a href="#">¸Ş´º 4</a></li>
 	</ul>
-</selection>
-</body>
-</html>
+  </body>
+ </html>

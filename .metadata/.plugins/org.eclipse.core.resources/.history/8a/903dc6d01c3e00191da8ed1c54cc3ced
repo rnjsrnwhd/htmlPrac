@@ -24,9 +24,6 @@
 	a[href]{
 		background:blue;
 	}
-	a[href="aa"]{
-		background: red;
-	}
 </style>
 </head>
 
