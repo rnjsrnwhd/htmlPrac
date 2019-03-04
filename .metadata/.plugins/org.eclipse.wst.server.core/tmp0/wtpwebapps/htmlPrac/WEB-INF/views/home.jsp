@@ -5,8 +5,12 @@
 <head>
 	<title>Home</title>
 	<style>
-		#container ul{
+		#container > ul{
 			border: 3px dotted blue;
+		}
+		h1 + ul{
+			color: red;
+			font-weight: bold;
 		}
 	</style>
 </head>
@@ -15,17 +19,17 @@
 	<header><h1>예약방법요금</h1></header>
 	<p> 요안도라 예약할려면?
 	<ul>
-		<li>예약방법
+		<h1>예약방법</h1>
 			<ul>
 				<li>직접통화</li>
 				<li>문자</li>		
 			</ul>
-		</li>
+		
 	
 		<li>가격
 			<ul>
 				<li>1인 10000</li>
-				<li>2인 20000</li>		
+				<li>2인 20000</li>		aa
 			</ul>
 		</li>
 	</ul>
