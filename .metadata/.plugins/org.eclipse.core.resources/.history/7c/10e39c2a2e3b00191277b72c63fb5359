@@ -1,0 +1,86 @@
+package global.sesoc.test.controller;
+
+import java.util.List;
+
+import javax.servlet.http.HttpSession;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import global.sesoc.test.dao.BookRepository;
+import global.sesoc.test.vo.Book;
+
+@Controller
+public class BookController {
+	// 모든 메서드와 멤버에 에 필요한 annotation을 설정하시오. 
+	@Autowired
+	BookRepository repository;
+	
+	// 독서노트 화면 이동
+	@RequestMapping(value="goReadingList",method=RequestMethod.GET)
+	public String readingList()	{
+				
+		return "readingList";
+	}
+	
+	// 개인의 모든 독서노트를 DB에서 조회함.
+	@RequestMapping(value="/readingList",method=RequestMethod.GET)
+	public @ResponseBody List<Book> readingList(Book book) {
+		List<Book> readingList = repository.readingList(book);
+		return readingList;
+	}
+	
+	// 독서 노트 등록
+	@RequestMapping(value="/insertReview",method=RequestMethod.POST)
+	public @ResponseBody String regist(Book book) {
+//		String userid = (String) session.getAttribute("loginId");
+//		book.setUserid(userid);
+		repository.insertReview(book);
+		return "success";
+	}
+	
+	// 독서 노트 삭제
+	@RequestMapping(value="/deleteReview",method=RequestMethod.POST)
+	public @ResponseBody String regist(int booknum, HttpSession session) {
+		int result = repository.deleteReview(booknum);
+		
+		if(result == 1) return "success";
+		else 			return "fail";
+		
+	}
+	
+	// 책장 종류 조회
+	@RequestMapping(value="/searchshelf",method=RequestMethod.GET)
+	public @ResponseBody List<Book> searchshelf(String shelfname,Book book, HttpSession session) {
+		String userid = (String) session.getAttribute("loginId");
+		book.setUserid(userid);
+		book.setShelfname(shelfname);
+		System.out.println(book);
+		List<Book> searchList = repository.searchShelf(book);
+		for (Book book2 : searchList) {
+			System.out.println(book2);
+		}
+		return searchList;
+
+	}
+	// 독서 노트 수정을 위한 정보 조회
+	public Book searchBook(int booknum, HttpSession session) {
+		Book searchList = repository.searchBook(booknum);
+		
+		return searchList;
+	}
+	
+	// 독서노트 수정을 처리
+	@RequestMapping(value="/updateBook",method=RequestMethod.POST)
+	public @ResponseBody String updateBook(Book book, HttpSession session) {
+		String userid = (String) session.getAttribute("loginId");
+		book.setUserid(userid);
+		System.out.println(book);
+		repository.updateReview(book);
+		
+		return "success";
+	}
+}

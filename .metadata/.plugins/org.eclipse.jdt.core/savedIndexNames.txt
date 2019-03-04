@@ -1,0 +1,16 @@
+INDEX VERSION 1.131+C:\Users\kita\Documents\workspace-sts-3.9.6.RELEASE\.metadata\.plugins\org.eclipse.jdt.core
+299277794.index
+1969961965.index
+3349824107.index
+3542676732.index
+3050026666.index
+2548999102.index
+2842836518.index
+4229998715.index
+874931453.index
+3215116959.index
+1633126520.index
+3466978807.index
+2328031551.index
+1677345846.index
+3489136019.index

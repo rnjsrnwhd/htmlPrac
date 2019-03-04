@@ -1,0 +1,68 @@
+package global.sesoc.test.controller;
+
+import javax.servlet.http.HttpSession;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+
+import global.sesoc.test.dao.BookRepository;
+import global.sesoc.test.dao.MemberRepository;
+import global.sesoc.test.vo.Member;
+
+@Controller
+public class MemberController {
+	@Autowired
+	MemberRepository repository;
+
+	/**
+	 * 로그인 폼 보기
+	 */
+	@RequestMapping (value="login", method=RequestMethod.GET)
+	public String loginForm() {
+		
+		return "loginForm";
+	}
+
+	/**
+	 * 로그인 처리
+	 * @param member 사용자가 입력한 아이디, 비밀번호
+	 * @param model Model객체
+	 * @param session HttpSession객체
+	 */
+	@RequestMapping(value="login", method=RequestMethod.POST)
+	public String login(Member member, Model model, HttpSession session) {
+		
+		Member m = repository.selectOne(member);
+		
+		String message = "";
+
+		// Code Here
+		// 아이디와 비밀번호를 잘못입력했을 경우 클라이언트단에서 사용할 메시지 저장
+		// 입력을 잘 했을 경우 세션에 필요한 데이터 저장
+		if(m==null) {
+			message = "로그인을 할 수 없습니다.";
+			model.addAttribute("errorMessage", message);
+		}
+		else {
+			session.setAttribute("loginId", m.getUserid());
+		}
+		
+		return "loginForm";
+	}
+	
+	/**
+	 * 로그아웃 처리
+	 * @param session HttpSession객체
+	 */
+	@RequestMapping (value="logout", method=RequestMethod.GET)
+	public String logout(HttpSession session) {
+		// 로그아웃 처리를 위한 작업
+		// 로그아웃 후에는 첫 화면으로 이동
+		// code Here
+		 
+		return null;
+	}
+}

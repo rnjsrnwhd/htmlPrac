@@ -1,0 +1,7 @@
+INDEX VERSION 1.131
+C:\Users\kita\Documents\workspace-sts-3.9.6.RELEASE\.metadata\.plugins\org.eclipse.jst.jsp.core\jspsearch\2300720504.index
+\aa\src\main\java
+C:\Users\kita\Documents\workspace-sts-3.9.6.RELEASE\.metadata\.plugins\org.eclipse.jst.jsp.core\jspsearch\2204096098.index
+\htmlPrac\src\main\java
+C:\Users\kita\Documents\workspace-sts-3.9.6.RELEASE\.metadata\.plugins\org.eclipse.jst.jsp.core\jspsearch\2007055016.index
+\Test_36_3rd_Exam2_배포코드\src\main\java

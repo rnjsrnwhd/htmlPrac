@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="global.sesoc.test.dao.BookMapper">
+
+<!-- 모든 도서 정보 조회 / 특정 책장의 도서 정보 조회  -->
+<select id="selectAll" resultType="Book" parameterType="Book">
+	<if test="shelfname!=null">
+	SELECT
+		BOOKNUM
+     	,SHELFNAME
+      	 ,USERID
+       	  ,BTITLE
+           ,WRITER
+            ,PUBLISHER
+            ,TO_CHAR(PURCHASEDATE,'YYYY-MM-DD') AS PURCHASEDATE
+             ,PRICE
+              ,BOOKREVIEW
+     FROM
+     	BOOKINFO
+     WHERE
+     	USERID=#{userid}
+     	AND
+     	SHELFNAME=#{shelfname}
+	</if>
+	<if test="shelfname==null">
+		SELECT
+		BOOKNUM
+     	,SHELFNAME
+      	 ,USERID
+       	  ,BTITLE
+           ,WRITER
+            ,PUBLISHER
+            ,TO_CHAR(PURCHASEDATE,'YYYY-MM-DD') AS PURCHASEDATE
+             ,PRICE
+              ,BOOKREVIEW
+     FROM
+     	BOOKINFO
+     WHERE
+     	USERID=#{userid}
+	</if> 	
+     	
+</select>
+
+<!-- 독서노트 저장 : code here  -->
+<insert id="insertReview" parameterType="Book">
+	INSERT INTO BOOKINFO
+	(
+		BOOKNUM
+     	,SHELFNAME
+      	 ,USERID
+       	  ,BTITLE
+           ,WRITER
+            ,PUBLISHER
+            ,TO_CHAR(PURCHASEDATE,'YYYY-MM-DD') AS PURCHASEDATE
+             ,PRICE
+              ,BOOKREVIEW
+	)
+	VALUES
+	(
+		BOOKINFO_SEQ.NEXTVAL
+		 ,#{shelfname}
+		  ,#{userid}
+		   ,#{btitle}
+		    ,#{writer}
+		     ,#{publisher}
+		     <if test="purchasedate!=''">
+		      ,#{purchasedate}
+		      </if>
+		      ,sysdate
+		       ,#{price}
+		        ,#{bookreview}
+	
+	)
+</insert>
+
+<!-- 독서 노트 삭제 Code here -->
+<delete id="deleteReview" parameterType="int">
+	DELETE FROM BOOKINFO
+	WHERE
+		BOOKNUM=#{booknum}
+</delete>
+
+<!-- 특정 도서에 대한 독서 노트를 검색 code here -->
+<select id="searchBook" parameterType="int" resultType="Book">
+	SELECT
+		BOOKNUM
+     	,SHELFNAME
+      	 ,USERID
+       	  ,BTITLE
+           ,WRITER
+            ,PUBLISHER
+            ,TO_CHAR(PURCHASEDATE,'YYYY-MM-DD') AS PURCHASEDATE
+             ,PRICE
+              ,BOOKREVIEW
+     FROM
+     	BOOKINFO
+     WHERE
+     	BOOKNUM=#{booknum}
+</select>
+
+
+<!-- 독서노트 수정 : code here -->
+<update id="updateBook" parameterType="Book">
+	UPDATE BOOKINFO
+	SET
+     	 SHELFNAME=#{shelfname}
+       	  ,BTITLE=#{btitle}
+           ,WRITER=#{writer}
+            ,PUBLISHER=#{publisher}
+            ,PURCHASEDATE=#{purchasedate}
+             ,PRICE=#{price}
+              ,BOOKREVIEW=#{bookreview}
+     WHERE
+     	BOOKNUM=#{booknum}
+</update>
+</mapper>

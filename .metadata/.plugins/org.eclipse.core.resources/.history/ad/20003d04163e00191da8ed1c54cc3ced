@@ -1,0 +1,14 @@
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ page session="false" %>
+<html>
+<head>
+	<title>Home</title>
+	<style>
+		
+	</style>
+</head>
+<body>
+<selection id="container">
+	<header><h1>예약방법요금</h1></header>
+</body>
+</html>

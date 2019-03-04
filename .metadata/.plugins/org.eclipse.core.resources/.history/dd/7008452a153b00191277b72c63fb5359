@@ -1,0 +1,77 @@
+package global.sesoc.test.controller;
+
+import java.util.List;
+
+import javax.servlet.http.HttpSession;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import global.sesoc.test.dao.BookRepository;
+import global.sesoc.test.vo.Book;
+
+@Controller
+public class BookController {
+	// 모든 메서드와 멤버에 에 필요한 annotation을 설정하시오. 
+	@Autowired
+	BookRepository repository;
+	
+	// 독서노트 화면 이동
+	@RequestMapping(value="goReadingList",method=RequestMethod.GET)
+	public String readingList()	{
+				
+		return "readingList";
+	}
+	
+	// 개인의 모든 독서노트를 DB에서 조회함.
+	@RequestMapping(value="/readingList",method=RequestMethod.GET)
+	public List<Book> readingList(Book book) {
+		List<Book> readingList = repository.readingList(book);
+		return resp;
+	}
+	
+	// 독서 노트 등록
+	@RequestMapping(value="/insertReview",method=RequestMethod.POST)
+	public @ResponseBody String regist(Book book) {
+//		String userid = (String) session.getAttribute("loginId");
+//		book.setUserid(userid);
+		repository.insertReview(book);
+		return "success";
+	}
+	
+	// 독서 노트 삭제
+	public String regist(int booknum, HttpSession session) {
+		int result = repository.deleteReview(booknum);
+		
+		if(result == 1) return "success";
+		else 			return "fail";
+	}
+	
+	// 책장 종류 조회
+	public List<Book> searchshelf(Book book, HttpSession session) {
+			
+		List<Book> searchList = repository.searchShelf(book);
+
+		return searchList;
+	}
+
+	// 독서 노트 수정을 위한 정보 조회
+	public Book searchBook(int booknum, HttpSession session) {
+		Book searchList = repository.searchBook(booknum);
+		
+		return searchList;
+	}
+	
+	// 독서노트 수정을 처리
+	public String updateBook(Book book, HttpSession session) {
+		String userid = (String) session.getAttribute("loginId");
+		book.setUserid(userid);
+		repository.updateReview(book);
+		
+		return "success";
+	}
+}

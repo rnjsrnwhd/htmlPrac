@@ -1,0 +1,293 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>내 책장</title>
+<link href="resources/main.css" rel="stylesheet" /> 
+<script src="resources/jquery-3.3.1.min.js"></script>
+<script>
+var bookno = '';	// 수정할 때 필요한 booknum를 담아 놓을 전역변수
+
+$(function() {
+	init();
+	// code here : 각 이벤트에 맞게 함수 호출
+	$("#bookRegist").on("click",bookregist);
+	$("#searchbtn").on("click",search);
+});
+
+// 초기화
+function init() {
+	// Code here
+	var userid = $("#loginId").val();
+	var shelfname  = $("#myshelfname").val();
+	
+	var mybookreview = {
+			"userid" : userid,
+			"shelfname" : "전체"
+		};
+	$.ajax({
+		
+			url:"readingList",
+			type:"get",
+			data:mybookreview,
+			success:function(resp){
+				output(resp);
+			}
+	});
+}
+	
+// 독서노트 검색 
+function search() {
+	// Code Here
+	var shelfname = $("#myshelfname").val();
+	$.ajax({
+		
+			url:"searchshelf",
+			type:"get",
+			data:{shelfname:shelfname},
+			success:function(resp){
+				$("#mybook").empty();
+				output(resp);
+			}
+	});
+}
+
+// 출력 코드
+function output(resp) {
+	// Code here
+	var data = '';
+	data += '<tr>';
+	data += '<td>책장명</td>';
+	data += '<td>책이름</td>';
+	data += '<td>저자</td>';
+	data += '<td>출판사</td>';
+	data += '<td>구매날짜</td>';
+	data += '<td>책가격</td>';
+	data += '<td>독서평</td>';
+	data += '<td>삭제</td>';
+	data += '</tr>';
+	
+	$.each(resp,function(index,item){
+		data += '<tr class="trReview" data-sno='+item.booknum+'>';
+		data += '<td class="tdShelfname">'+item.shelfname+'</td>';
+		data += '<td class="tdBtitle">'+item.btitle+'</td>';
+		data += '<td class="tdWriter">'+item.writer+'</td>';
+		data += '<td class="tdPublisher">'+item.publisher+'</td>';
+		data += '<td class="tdPurchasedate">'+item.purchasedate+'</td>';
+		data += '<td class="tdPrice">'+item.price+'</td>';
+		data += '<td class="tdBookreview">'+item.bookreview+'</td>';
+		data += '<td><input type="button" class="delBtn" value="삭제" data-sno="'+item.booknum+'"><br><input type="button" class="udtBtn" value="수정" data-sno="'+item.booknum+'"></td>';
+		data += '</tr>';
+	});
+	$("#book").html(data);
+	$(".delBtn").on("click",bookdelete);
+	$(".udtBtn").on("click",bookupdate);
+}
+
+// 책 정보 / 독서평 수정
+function bookupdate() {
+	
+	if($("#bookRegist").val() != '독서평 등록') return;
+
+	// Code here
+	var booknum = $(this).attr('data-sno');
+	var shelfname = $(".trReview[data-sno='"+booknum+"'] .tdShelfname").html();
+	var btitle = $(".trReview[data-sno='"+booknum+"'] .tdBtitle").html();
+	var writer = $(".trReview[data-sno='"+booknum+"'] .tdWriter").html();
+	var publisher = $(".trReview[data-sno='"+booknum+"'] .tdPublisher").html();
+	var purchasedate = $(".trReview[data-sno='"+booknum+"'] .tdPurchasedate").html();
+	var price = $(".trReview[data-sno='"+booknum+"'] .tdPrice").html();
+	var bookreview = $(".trReview[data-sno='"+booknum+"'] .tdBookreview").html();
+	
+	
+	$("#shelfname").val(shelfname);
+	$("#btitle").val(btitle);
+	$("#writer").val(writer);
+	$("#publisher").val(publisher);
+	$("#purchasedate").val(purchasedate);
+	$("#price").val(price);
+	$("#bookreview").val(bookreview);
+	
+	$("#bookRegist").val("독서평 수정");
+	
+}
+// 책 정보 삭제
+function bookdelete() {
+	var booknum = $(this).attr('data-sno');
+	
+	// Code here
+	$.ajax({
+		
+			url:"deleteReview",
+			type:"post",
+			data:{booknum:booknum},
+			success:function(){
+				init();
+			}
+	});
+}
+
+// 도서평 등록 / 책 정보 수정 처리
+function bookregist() {
+	var shelfname  = $("#shelfname").val();
+	var btitle     = $("#btitle").val();
+	var writer     = $("#writer").val();
+	var publisher  = $("#publisher").val();
+	var purchasedate = $("#purchasedate").val();
+	var price      = $("#price").val();
+	var bookreview = $("#bookreview").val();
+	var userid = $("#loginId").val();
+	// 데이터가 정확히 입력되었는지 검증
+	// 책제목, 저자, 출판사를 반드시 입력하지 않으면 경고창 
+	// 책 가격을 문자로 입력했을 경우 재 입력
+	// Code Here
+	if(shelfname.length==0||btitle.length==0||price.length==0){
+		alert("빈칸이 존재합니다.");
+		return;
+	}
+	if(isNaN(price)){
+		alert("가격은 숫자만 입력 가능합니다.");
+		return;
+	}
+	
+	var mybookreview = {
+		"userid" : userid
+		,"shelfname" : shelfname
+		, "btitle"  : btitle
+		, "writer"  : writer
+		, "publisher" : publisher
+		, "purchasedate" : purchasedate
+		, "price" : price
+		, "bookreview" : bookreview
+	};
+	
+	var url = '';
+	
+	// 등록버튼인지 수정버튼인지에 따라 url이 달라져야 한다.
+	// Code here
+	var op = $("#bookRegist").val();
+	
+	if(op=="독서평 등록"){
+		url = 'insertReview';
+		$.ajax({
+			type : 'POST'
+			, url : url
+			, data : mybookreview
+			, success : function(resp) {
+				$("#shelfname").val("");
+				$("#btitle").val("");
+				$("#writer").val("");
+				$("#publisher").val("");
+				$("#purchasedate").val("");
+				$("#price").val("");
+				$("#bookreview").val("");
+				init();
+			}
+		});
+	}else if(op=="독서평 수정"){
+		url = 'updateBook';
+		$.ajax({
+			type : 'POST'
+			, url : url
+			, data : mybookreview
+			, success : function(resp) {
+				$("#shelfname").val("");
+				$("#btitle").val("");
+				$("#writer").val("");
+				$("#publisher").val("");
+				$("#purchasedate").val("");
+				$("#price").val("");
+				$("#bookreview").val("");
+				init();
+				$("#bookRegist").val("독서평 등록");
+			}
+		});
+	}
+	
+}
+</script>
+
+</head>
+<body>
+<div id="wrapper">
+<form>
+<table id="regist" >
+	<tr>
+		<th>책장 종류</th>
+		<td>
+		<select id="shelfname" name="shelfname">
+			<option value="기본책장" >기본책장</option>
+			<option value="소설" >소설</option>
+			<option value="IT 전공서적" >IT 전공서적</option>
+			<option value="완독책장" >완독책장</option>
+		</select>
+		</td>
+	</tr>
+	<tr>
+		<th>책이름</th>
+		<td>
+			<input id="btitle" type="text" name="btitle" />
+		</td>
+	</tr>
+	<tr>
+		<th>저자</th>	
+		<td>
+			<input id="writer" type="text" name="writer" />
+		</td>
+	</tr>
+	<tr>	
+		<th>출판사</th>
+		<td>
+			<input id="publisher" type="text" name="publisher" />
+		</td>
+	</tr>
+	<tr>
+		<th>구매날짜</th>
+		<td>
+			<input id="purchasedate" type="date" name="purchasedate" />
+		</td>
+	</tr>
+	<tr>
+		<th>책가격</th>
+		<td>
+			<input id="price" type="text" name="price" />
+		</td>	
+	</tr>
+	<tr>
+		<th>독서평</th>
+		<td>
+			<textarea id="bookreview" name="bookreview"  cols="50" rows="5"></textarea>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="2">
+			<input id="loginId" type="hidden" value="${sessionScope.loginId}">
+			<input id="bookRegist" type="button" value="독서평 등록" />
+			<input id="cancel" type="reset" value="취소" />
+		</td>
+	</tr>
+</table>
+</form>
+<hr />
+<h2>[ 내 독서 노트 ]</h2>
+<div id="mybook">
+<form id="search">
+	<select id="myshelfname" name="myshelfname">
+		<option value="전체" >전체</option>
+		<option value="기본책장" >기본책장</option>
+		<option value="소설" >소설</option>
+		<option value="IT 전공서적" >IT 전공서적</option>
+		<option value="완독책장" >완독책장</option>
+	</select>
+	<input id="searchbtn" type="button" value="검색" />
+</form>
+
+<table id="book">
+</table>
+</div>
+</div>
+</body>
+</html>
