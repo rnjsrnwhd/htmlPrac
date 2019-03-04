@@ -1,42 +1,34 @@
-<%@ page language="java" contentType="text/html; charset=EUC-KR"
-    pageEncoding="EUC-KR"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="utf-8">
-<title>속성 선택자</title>
+<meta charset="UTF-8">
 <style>
-   ul {
-		 list-style:none;
-   }
-	 li {
-		 width:100px;	 
-		 display:inline;
-		 float:left;
-		 margin:10px;
-	 }
-		li a {
-			padding: 5px 20px;
-			font-size: 14px;
-			color: blue;
-			text-decoration: none;
-		}
-	a[href]{
-		background:blue;
-	}
-	a[href="aa"]{
-		background: red;
-	}
+ #car:hover {
+  	width:100px;
+  	heigth:auto;
+  	animation-name:change-bg;
+  	animation-duration:3s;
+ }
+
+ 
+ @keyframes change-bg {
+ 	from {
+ 			width:100px;
+  			heigth:auto;
+ 		
+ 	}
+ 	to {
+ 		transform: translateX(1000px);
+ 	}
+ }
 </style>
 </head>
-
 <body>
-	<ul>
-		<li><a>메인 메뉴 : </a></li>
-		<li><a href="#">메뉴 1</a></li>
-		<li><a href="#">메뉴 2</a></li>
-		<li><a href="aa">하이하이</a></li>
-		<li><a href="#">메뉴 4</a></li>
-	</ul>
-  </body>
- </html>
+<div class="orign">
+	<div class="movex"><img id="car" src="resources/car.jpg"></div>
+</div>
+</body>
+</html>

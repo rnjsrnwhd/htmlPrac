@@ -6,22 +6,20 @@
 <head>
 <meta charset="UTF-8">
 <style>
- #car:hover {
+ #car {
   	width:100px;
   	heigth:auto;
-  	animation-name:change-bg;
-  	animation-duration:3s;
  }
-
+ .movex:hover{
+ 	transform: translateX(200px);
+ }
  
  @keyframes change-bg {
  	from {
- 			width:100px;
-  			heigth:auto;
  		
  	}
  	to {
- 		transform: translateX(1000px);
+ 	
  	}
  }
 </style>

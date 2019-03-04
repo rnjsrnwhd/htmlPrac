@@ -16,8 +16,6 @@
  
  @keyframes change-bg {
  	from {
- 			width:100px;
-  			heigth:auto;
  		
  	}
  	to {
